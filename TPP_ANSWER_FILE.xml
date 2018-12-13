@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<TppConfiguration CreatedOn="09/07/2018 01:48:21" By="SYSTEM" On="WIN-TPP">
+  <Components>
+    <Products>CertificateProduct
+MobileProduct
+CommonProduct
+</Products>
+    <Features>Acme
+BulkProvisioning
+CAImport
+Certificates
+CloudMonitoring
+Scep
+OBDDiscovery
+TrustNetIntegration
+Validation
+UserCertPreEnrollment
+Aperture
+Client
+Discovery
+Monitoring
+Reporting
+WebAdmin
+WebSDK
+</Features>
+  </Components>
+  <Database>
+    <DSN>Data Source=192.168.0.209,1433;Initial Catalog=TPP;User ID=sa;Password=Passw0rd</DSN>
+  </Database>
+  <SoftwareEncryption>
+    <Key>-----BEGIN VED ENCRYPTED KEY-----
+I99fBCvUayansebkqbKpiOJzNZcLBXz+hT/r0FpURoYw5V5Xi7FTh9F4I40nBn0o
+aMR3xKrbhDftG+8xzVp4H5K30uL6V8PYDlgx1HKrB8XmTGovgxxMQWcyElQ3rHnb
+FRS63HOB/4IfliivKV5yB9Ue0wiTcOiK6KH1anKkF8gNef/qtVK7l/IvUrjdnGb4
+/i+bVah7IigFL+vjS/1gZ3HwOfF5ZW5nZIainyRDB58YX8+EqrMUXrSJPGUUt2Zv
+bRtBpAUSwRMNDilwDU5wp/UyvEduSTiNXequFig9dciEUpmmgALcoS5jsMlR8C1F
+/XK45BsOcU2VLwHuh5EKrFz9QnkckRFwDP7AjrLSWkdd5mMBraiAwHtkxDj6u4tQ
+wi4I2QZb2Iv8QfeY1tnDYW/gqrUnC314xyjo7Qp4UHRZOHMCAgcZh2YP7usS9ESZ
+UippeKYOUkgINxw+mrb2hOYC1ynNb6M+S3iyUN2YCwKaTBu/NX20uhc0i/4/gcl3
+FJ4vq4j3GFxRdVE8N0bpJgv1Rsam65zf
+-----END VED ENCRYPTED KEY-----</Key>
+    <Password>newPassw0rd!</Password>
+  </SoftwareEncryption>
+  <AdminAccount>
+    <Username>admin</Username>
+    <Password>newPassw0rd!</Password>
+  </AdminAccount>
+  <Logging>
+    <LogProcessor />
+  </Logging>
+  <Server>
+    <StartServices>no</StartServices>
+    <LogPath>C:\Program Files\Venafi\Logs\Tpp Configuration Log.txt</LogPath>
+  </Server>
+</TppConfiguration>
