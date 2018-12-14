@@ -109,7 +109,6 @@ def already_installed(name):
 def exec_update(name, url):
     time = dt.now()
     with open(tpp_log, 'w') as f:
-        print('{}\n'.format(time.strftime('%d-%m-%Y-%H:%M')))
         f.write('{}\n'.format(time.strftime('%d-%m-%Y-%H:%M')))
         if not already_installed(name):
             download_latest_build('VenafiTPPInstallx64', url, f)
