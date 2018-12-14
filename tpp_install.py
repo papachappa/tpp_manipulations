@@ -4,7 +4,8 @@
 #   Choose branch between PROD_URL, DEV_URL_JAGUAR, DEV_URL_FEATURE, DEV_URL_DEV and pass it 
 #   to starter() as argument. The script will automatically uninstall and then install newer version.
 #   If reboot has happend you need to run this script again. Or you can make automatic execution 
-#   of this script at windows startup by create a windows schedule.
+#   of this script at windows startup by create a windows schedule. Portal is set up on the same
+#   server as tpp.
 #   
 #   ! YOU NEED TO HAVE PROPER ANSWER TPP XML(SCHEMA) FILE !
 #   ! SET IN AS XML_SCHEMA CONST !
