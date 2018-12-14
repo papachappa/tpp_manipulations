@@ -9,24 +9,27 @@ import win32serviceutil
 from pywinauto import Application
 
 
-tpp_log = r'C:\tpp_inst_log.txt'
-tmp_dir = r'C:\tmp'
-xml_schema = r'C:\TPP_ANSWER_FILE.xml'
+TPP_LOG = r'C:\tpp_inst_log.txt'
+TMP_DIR = r'C:\tmp'
+XML_SCHEMA = r'C:\TPP_ANSWER_FILE.xml'
 
-tpp_config_path = r'C:\Program Files\Venafi\Platform'
-portal_config_path = r'C:\Program Files\Venafi\User Portal'
+TPP_CONFIG_PATH = r'C:\Program Files\Venafi\Platform'
+PORTAL_CONFIG_PATH = r'C:\Program Files\Venafi\User Portal'
 
-portal_name = "Venafi User Portal"
-tpp_name = "Venafi Trust Protection Platform"
+TPP_BUILD_NAME = 'VenafiTPPInstallx64'
+PORTAL_BUILD_NAME = 'UserPortalInstallx64'
 
-tpp_config_util = 'TppConfiguration.exe'
-portal_config_util = 'PortalSetup.exe'
+PORTAL_NAME = "Venafi User Portal"
+TPP_NAME = "Venafi Trust Protection Platform"
 
-prod_url = "https://files.prod.ca.eng.venafi.com/builds-prod/TPP_19.1_Build_Prod_W2012/"
-dev_url_jaguar = 'https://files.prod.ca.eng.venafi.com/builds-dev/TPP_19.1_Build_Jaguar_W2012/'
+TPP_CONFIG_UTIL = 'TppConfiguration.exe'
+PORTAL_CONFIG_UTIL = 'PortalSetup.exe'
 
-dev_url_feature = 'https://files.prod.ca.eng.venafi.com/builds-dev/TPP_19.1_Build_Feature_W2012/'
-dev_url_dev = 'https://files.prod.ca.eng.venafi.com/builds-dev/TPP_19.1_Build_Dev_W2012/'
+PROD_URL = "https://files.prod.ca.eng.venafi.com/builds-prod/TPP_19.1_Build_Prod_W2012/"
+DEV_URL_JAGUAR = 'https://files.prod.ca.eng.venafi.com/builds-dev/TPP_19.1_Build_Jaguar_W2012/'
+
+DEV_URL_FEATURE = 'https://files.prod.ca.eng.venafi.com/builds-dev/TPP_19.1_Build_Feature_W2012/'
+DEV_URL_DEV = 'https://files.prod.ca.eng.venafi.com/builds-dev/TPP_19.1_Build_Dev_W2012/'
 
 
 def get_latest_build_folder(build_url, f):
@@ -49,30 +52,30 @@ def download_latest_build(name, build_url, f):
     r = requests.get("{}{}/Product/{}.msi".format(
         build_url, lbuild, name), stream=True
     )
-    with open(r'{}\{}.msi'.format(tmp_dir, name), 'wb') as fd:
+    with open(r'{}\{}.msi'.format(TMP_DIR, name), 'wb') as fd:
         for chunk in r.iter_content(2000):
             fd.write(chunk)
 
 
 def delete_tmp_files():
     try:
-        for x in os.listdir(tmp_dir):
-            os.remove(os.path.join(tmp_dir, x))
+        for x in os.listdir(TMP_DIR):
+            os.remove(os.path.join(TMP_DIR, x))
     except OSError:
         pass
 
 
 def install_build(name, f):
     f.write("Installing build...\n")
-    os.system('msiexec /i %s /qn' % r'{}\{}.msi'.format(tmp_dir, name))
+    os.system('msiexec /i %s /qn' % r'{}\{}.msi'.format(TMP_DIR, name))
     delete_tmp_files()
 
 
 def configure_tpp(f):
     f.write("Configuring tpp...\n")
-    os.chdir(tpp_config_path)
+    os.chdir(TPP_CONFIG_PATH)
     status_code = os.system(
-        r'{} -add -install:{}'.format(tpp_config_util, xml_schema))
+        r'{} -add -install:{}'.format(TPP_CONFIG_UTIL, XML_SCHEMA))
     if status_code != 0 and status_code != 5:
         raise Exception(
             "Tpp configuration failed with error level: {}".format(status_code)
@@ -81,8 +84,8 @@ def configure_tpp(f):
 
 def configure_portal(f):
     f.write("Configuring portal...\n")
-    os.chdir(portal_config_path)
-    app = Application(backend='uia').start(portal_config_util)
+    os.chdir(PORTAL_CONFIG_PATH)
+    app = Application(backend='uia').start(PORTAL_CONFIG_UTIL)
     app.dlg.child_window(auto_id="rdoLocal").select()
     app.dlg.Install.click()
 
@@ -123,8 +126,8 @@ def need_uninstall(name, f):
 
 def exec_tpp_update(name, url, f):
     if not already_installed(name):
-        download_latest_build('VenafiTPPInstallx64', url, f)
-        install_build('VenafiTPPInstallx64', f)
+        download_latest_build(TPP_BUILD_NAME, url, f)
+        install_build(TPP_BUILD_NAME, f)
         configure_tpp(f)
         start_tpp_services(f)
         f.write('TPP successfully installed!\n')
@@ -135,8 +138,8 @@ def exec_tpp_update(name, url, f):
 
 def exec_portal_update(name, url, f):
     if not already_installed(name):
-        download_latest_build('UserPortalInstallx64', url, f)
-        install_build('UserPortalInstallx64', f)
+        download_latest_build(PORTAL_BUILD_NAME, url, f)
+        install_build(PORTAL_BUILD_NAME, f)
         configure_portal(f)
         f.write('Portal successfully installed!\n')
         # ctypes.windll.user32.MessageBoxW(0, "Portal Installed!", "Portal", 0)
@@ -146,16 +149,16 @@ def exec_portal_update(name, url, f):
 
 def starter():
     time = dt.now()
-    with open(tpp_log, 'w') as f:
+    with open(TPP_LOG, 'w') as f:
         f.write('{}\n'.format(time.strftime('%d-%m-%Y-%H:%M')))
         try:
-            need_uninstall(portal_name, f)
-            need_uninstall(tpp_name, f)
-            exec_tpp_update(tpp_name, dev_url_jaguar, f)
-            exec_portal_update(portal_name, dev_url_jaguar, f)
+            need_uninstall(PORTAL_NAME, f)
+            need_uninstall(TPP_NAME, f)
+            exec_tpp_update(TPP_NAME, DEV_URL_JAGUAR, f)
+            exec_portal_update(PORTAL_NAME, DEV_URL_JAGUAR, f)
             restart_iis(f)
         except Exception as e:
-            f.write('During execute commands exception occur: {}\n'.format(e))
+            f.write('During commands execution the exception occur: {}\n'.format(e))
 
 if __name__ == "__main__":
     starter()
