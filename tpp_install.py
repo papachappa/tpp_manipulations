@@ -5,7 +5,9 @@
 #   to starter() as argument. The script will automatically uninstall and then install newer version.
 #   If reboot has happend you need to run this script again. Or you can make automatic execution 
 #   of this script at windows startup by create a windows schedule.
-# 
+#   
+#   !YOU NEED TO HAVE PROPER ANSWER TPP XML(SCHEMA) FILE!
+#
 #   libraries needed : beautifulsoup4, pywin32, pywinauto, requests, urllib3, WMI
 
 import os
