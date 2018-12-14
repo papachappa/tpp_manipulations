@@ -25,6 +25,7 @@ TPP_NAME = "Venafi Trust Protection Platform"
 TPP_CONFIG_UTIL = 'TppConfiguration.exe'
 PORTAL_CONFIG_UTIL = 'PortalSetup.exe'
 
+# Branches
 PROD_URL = "https://files.prod.ca.eng.venafi.com/builds-prod/TPP_19.1_Build_Prod_W2012/"
 DEV_URL_JAGUAR = 'https://files.prod.ca.eng.venafi.com/builds-dev/TPP_19.1_Build_Jaguar_W2012/'
 
@@ -147,18 +148,19 @@ def exec_portal_update(name, url, f):
         f.write("First uninstall previous portal version!\n")
 
 
-def starter():
+def starter(branch_name):
     time = dt.now()
     with open(TPP_LOG, 'w') as f:
         f.write('{}\n'.format(time.strftime('%d-%m-%Y-%H:%M')))
         try:
             need_uninstall(PORTAL_NAME, f)
             need_uninstall(TPP_NAME, f)
-            exec_tpp_update(TPP_NAME, DEV_URL_JAGUAR, f)
-            exec_portal_update(PORTAL_NAME, DEV_URL_JAGUAR, f)
+            exec_tpp_update(TPP_NAME, branch_name, f)
+            exec_portal_update(PORTAL_NAME, branch_name, f)
             restart_iis(f)
         except Exception as e:
             f.write('During commands execution the exception occur: {}\n'.format(e))
 
 if __name__ == "__main__":
-    starter()
+    # Function argument is a repo's branch name
+    starter(DEV_URL_JAGUAR)
