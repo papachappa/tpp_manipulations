@@ -8,6 +8,7 @@ import requests
 import win32serviceutil
 from pywinauto import Application
 
+
 tpp_log = r'C:\tpp_inst_log.txt'
 tmp_dir = r'C:\tmp'
 xml_schema = r'C:\TPP_ANSWER_FILE.xml'
@@ -103,27 +104,56 @@ def already_installed(name):
     w = wmi.WMI()
     for app in w.Win32_Product():
         if app.Name.startswith(name):
-            return True
+            return app.Name
 
 
-def exec_update(name, url):
+def uninstall(app, f):
+    w = wmi.WMI()
+    for product in w.Win32_Product(Name=app):
+        f.write("Uninstalling " + app + "...\n")
+        product.Uninstall()
+        f.write("The app uninstalled\n")
+
+
+def need_uninstall(name, f):
+    n = already_installed(name)
+    if n:
+        uninstall(n, f)
+
+
+def exec_tpp_update(name, url, f):
+    if not already_installed(name):
+        download_latest_build('VenafiTPPInstallx64', url, f)
+        install_build('VenafiTPPInstallx64', f)
+        configure_tpp(f)
+        start_tpp_services(f)
+        f.write('TPP successfully installed!\n')
+        # ctypes.windll.user32.MessageBoxW(0, "TPP Installed!", "TPP", 0)
+    else:
+        f.write("First uninstall previous tpp version!\n")
+
+
+def exec_portal_update(name, url, f):
+    if not already_installed(name):
+        download_latest_build('UserPortalInstallx64', url, f)
+        install_build('UserPortalInstallx64', f)
+        configure_portal(f)
+        f.write('Portal successfully installed!\n')
+        # ctypes.windll.user32.MessageBoxW(0, "Portal Installed!", "Portal", 0)
+    else:
+        f.write("First uninstall previous portal version!\n")
+
+
+def starter():
     time = dt.now()
     with open(tpp_log, 'w') as f:
         f.write('{}\n'.format(time.strftime('%d-%m-%Y-%H:%M')))
-        if not already_installed(name):
-            download_latest_build('VenafiTPPInstallx64', url, f)
-            install_build('VenafiTPPInstallx64', f)
-            download_latest_build('UserPortalInstallx64', url, f)
-            install_build('UserPortalInstallx64', f)
-            configure_tpp(f)
-            start_tpp_services(f)
-            configure_portal(f)
-            restart_iis(f)
-            f.write('TPP successfully installed!')
-            ctypes.windll.user32.MessageBoxW(0, "TPP Installed!", "TPP", 0)
-        else:
-            f.write("First uninstall previous version!\n")
+        need_uninstall(portal_name, f)
+        need_uninstall(tpp_name, f)
+        exec_tpp_update(tpp_name, dev_url_jaguar, f)
+        exec_portal_update(portal_name, dev_url_jaguar, f)
+        restart_iis(f)
 
 
 if __name__ == "__main__":
-    exec_update(tpp_name, dev_url_jaguar)
+    starter()
