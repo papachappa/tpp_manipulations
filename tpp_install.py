@@ -1,3 +1,13 @@
+#   The script is designed to update/reinstall tpp/user portal to the newer version
+#
+#   Steps to execute:
+#   Choose branch between PROD_URL, DEV_URL_JAGUAR, DEV_URL_FEATURE, DEV_URL_DEV and pass it 
+#   to starter() as argument. The script will automatically uninstall and then install newer version.
+#   If reboot has happend you need to run this script again. Or you can make automatic execution 
+#   of this script at windows startup by create a windows schedule.
+# 
+#   libraries needed : beautifulsoup4, pywin32, pywinauto, requests, urllib3, WMI
+
 import os
 from datetime import datetime as dt
 
