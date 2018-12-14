@@ -148,12 +148,14 @@ def starter():
     time = dt.now()
     with open(tpp_log, 'w') as f:
         f.write('{}\n'.format(time.strftime('%d-%m-%Y-%H:%M')))
-        need_uninstall(portal_name, f)
-        need_uninstall(tpp_name, f)
-        exec_tpp_update(tpp_name, dev_url_jaguar, f)
-        exec_portal_update(portal_name, dev_url_jaguar, f)
-        restart_iis(f)
-
+        try:
+            need_uninstall(portal_name, f)
+            need_uninstall(tpp_name, f)
+            exec_tpp_update(tpp_name, dev_url_jaguar, f)
+            exec_portal_update(portal_name, dev_url_jaguar, f)
+            restart_iis(f)
+        except Exception as e:
+            f.write('During execute commands exception occur: {}\n'.format(e))
 
 if __name__ == "__main__":
     starter()
