@@ -102,7 +102,8 @@ def configure_portal(f):
     f.write("Configuring portal...\n")
     os.chdir(PORTAL_CONFIG_PATH)
     app = Application(backend='uia').start(PORTAL_CONFIG_UTIL)
-    app.dlg.child_window(auto_id="rdoLocal").select()
+    app.dlg.child_window(title="Aperture is already installed on this server.", auto_id="rdoLocal").select()
+    # app.dlg.child_window(auto_id="rdoLocal").select()
     app.dlg.Install.click()
 
 
