@@ -1,0 +1,6 @@
+beautifulsoup4==4.6.3
+pywin32==224
+pywinauto==0.6.5
+requests==2.21.0
+urllib3==1.24.1
+WMI==1.4.9

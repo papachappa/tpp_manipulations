@@ -10,7 +10,13 @@
 #   ! YOU NEED TO HAVE PROPER ANSWER TPP XML(SCHEMA) FILE !
 #   ! SET IN AS XML_SCHEMA CONST !
 #
-#   libraries needed : beautifulsoup4, pywin32, pywinauto, requests, urllib3, WMI
+#   libraries needed : 
+#       beautifulsoup4==4.6.3
+#       pywin32==224
+#       pywinauto==0.6.5
+#       requests==2.21.0
+#       urllib3==1.24.1
+#       WMI==1.4.9
 #
 
 import os
