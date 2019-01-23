@@ -79,7 +79,8 @@ def download_latest_build(name, build_url, f):
         print("Directory " , TMP_DIR ,  " Created ") 
     except OSError:
         print("Directory " , TMP_DIR ,  " already exists")
-	with open(r'{}\{}.msi'.format(TMP_DIR, name), 'wb') as fd:
+	
+    with open(r'{}\{}.msi'.format(TMP_DIR, name), 'wb') as fd:
         for chunk in r.iter_content(2000):
             fd.write(chunk)
 
